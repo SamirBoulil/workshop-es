@@ -1,0 +1,6 @@
+{
+    "require": {
+        "elasticsearch/elasticsearch": "^6.1",
+        "phpunit/phpunit": "^8.0"
+    }
+}
