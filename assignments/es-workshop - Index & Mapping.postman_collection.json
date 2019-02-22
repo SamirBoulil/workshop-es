@@ -1,0 +1,864 @@
+{
+	"info": {
+		"_postman_id": "cb0903e9-7c12-402e-898c-3129092c4343",
+		"name": "es-workshop - Index & Mapping",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Naïve indexation",
+			"item": [
+				{
+					"name": "1. Check elasticsearch is up",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200",
+							"host": [
+								"localhost"
+							],
+							"port": "9200"
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Create Index",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:9200/movies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Index a movie",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"film_id\": 507,\n    \"title\": \"LADYBUGS ARMAGEDDON\",\n    \"description\": \"A Fateful Reflection of a Dog And a Mad Scientist who must Meet a Mad Scientist in New Orleans\",\n    \"release_year\": 2006,\n    \"language\": \"English\",\n    \"rental_duration\": 4,\n    \"rental_rate\": 0.99,\n    \"length\": 113,\n    \"replacement_cost\": 13.99,\n    \"rating\": \"NC-17\",\n    \"last_update\": \"2007-09-10T17:46:03.905795\",\n    \"special_features\": [\n        \"Deleted Scenes\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/507",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"507"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Get the movie back",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/507",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"507"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Count the number of movies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_count",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. Read mapping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/movies/_mapping",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"_mapping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7. Removing the movie",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/movies/_doc/507",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"_doc",
+								"507"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8. Delete index",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/movies",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies"
+							]
+						},
+						"description": "https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-delete-index.html"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Explicit indexation",
+			"item": [
+				{
+					"name": "9. Create Index with explicit mapping",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mappings\": {\n        \"my_movies\": {\n            \"properties\": {\n                \"film_id\": {\n                    \"type\": \"integer\"\n                },\n                \"title\": {\n                    \"type\": \"keyword\"\n                },\n                \"description\": {\n                    \"type\": \"keyword\"\n                },\n                \"release_year\": {\n                    \"type\": \"integer\"\n                },\n                \"language\": {\n                    \"type\": \"keyword\"\n                },\n                \"rental_duration\": {\n                    \"type\": \"integer\"\n                },\n                \"rental_rate\": {\n                    \"type\": \"float\"\n                },\n                \"length\": {\n                    \"type\": \"integer\"\n                },\n                \"replacement_cost\": {\n                    \"type\": \"float\"\n                },\n                \"rating\": {\n                    \"type\": \"keyword\"\n                },\n                \"last_update\": {\n                    \"type\": \"date\"\n                },\n                \"special_features\": {\n                    \"type\": \"keyword\"\n                }\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:9200/movies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "10. Read mapping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/_mapping/my_movies",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"_mapping",
+								"my_movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "11. Index a movie",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"film_id\": 507,\n    \"title\": \"LADYBUGS ARMAGEDDON\",\n    \"description\": \"A Fateful Reflection of a Dog And a Mad Scientist who must Meet a Mad Scientist in New Orleans\",\n    \"release_year\": 2006,\n    \"language\": \"English\",\n    \"rental_duration\": 4,\n    \"rental_rate\": 0.99,\n    \"length\": 113,\n    \"replacement_cost\": 13.99,\n    \"rating\": \"NC-17\",\n    \"last_update\": \"2007-09-10T17:46:03.905795\",\n    \"special_features\": [\n        \"Deleted Scenes\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/507",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"507"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "12. Get the movie back",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/507",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"507"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "13. Index wrong data",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"film_id\": 507,\n    \"title\": \"LADYBUGS ARMAGEDDON\",\n    \"description\": \"A Fateful Reflection of a Dog And a Mad Scientist who must Meet a Mad Scientist in New Orleans\",\n    \"release_year\": 2006,\n    \"language\": \"English\",\n    \"rental_duration\": 4,\n    \"rental_rate\": 0.99,\n    \"length\": 113,\n    \"replacement_cost\": 13.99,\n    \"rating\": \"NC-17\",\n    \"last_update\": \"wrong date\",\n    \"special_features\": [\n        \"Deleted Scenes\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/507",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"507"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Normalizer & Analyzer",
+			"item": [
+				{
+					"name": "1. Delete index",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/movies",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies"
+							]
+						},
+						"description": "https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-delete-index.html"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Create Index",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t// Fill the index settings (normalizers and analyzers here)\n    \"mappings\": {\n        \"my_movies\": {\n            \"properties\": {\n            \t// Fill the mapping of the properties here\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:9200/movies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Test the mapping with \"_analyze\"",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"field\": \"description\",\n    \"text\": \"<body>A Fateful Reflection of a Dog&a Mad Scientist who must Meet a Mad Scientist in New Orleans</body>\"\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/_analyze",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"_analyze"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Index a movie",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"film_id\": 507,\n    \"title\": \"LADYBUGS ARMAGEDDON\",\n    \"description\": \"<body>A Fateful Reflection of a Dog&a Mad Scientist who must Meet a Mad Scientist in New Orleans</body>\",\n    \"release_year\": 2006,\n    \"language\": \"English\",\n    \"rental_duration\": 4,\n    \"rental_rate\": 0.99,\n    \"length\": 113,\n    \"replacement_cost\": 13.99,\n    \"rating\": \"NC-17\",\n    \"last_update\": \"2007-09-10T17:46:03.905795\",\n    \"special_features\": [\n        \"Deleted Scenes\"\n    ]\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/507",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"507"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Exact search on description with case sensitive",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"constant_score\": {\n            \"filter\": {\n                \"term\": {\n                    \"description\": \"<body>A Fateful Reflection of a Dog&a Mad Scientist who must Meet a Mad Scientist in New Orleans</body>\"\n                }\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_search",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Exercise: Exact case insensitive search",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"constant_score\": {\n            \"filter\": {\n                \"term\": {\n                    \"description\": \"<body>a fateful reflection of a dog&a mad scientist who must meet a mad scientist in new orleans</body>\"\n                }\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_search",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. Exercise: search on part of sentence with case sensitive",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"constant_score\": {\n            \"filter\": {\n                \"term\": {\n                    \"description.word_by_word_sensitive\": \"Fateful\"\n                }\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_search",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7. Exercise: search on part of sentence with case insensitive",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"constant_score\": {\n            \"filter\": {\n                \"term\": {\n                    \"description.word_by_word_insensitive\": \"new\"\n                }\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_search",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8. search on multiple word",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"constant_score\": {\n            \"filter\": {\n                \"terms\": {\n                    \"description.word_by_word_insensitive\": [\"fateful\", \"scientist\"]\n                }\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_search",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "9. Exercise: Replace & with space",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"constant_score\": {\n            \"filter\": {\n                \"term\": {\n                    \"description.word_by_word_insensitive_html_stripped\": \"dog\"\n                }\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_search",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dynamic mapping",
+			"item": [
+				{
+					"name": "1. Delete index",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/movies",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies"
+							]
+						},
+						"description": "https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-delete-index.html"
+					},
+					"response": []
+				},
+				{
+					"name": "2. Create Index",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"mappings\": {\n        \"my_movies\": {\n            \"properties\": {\n\t\t\t\t// define your mapping here\n            },\n            \"dynamic_templates\": [\n\t\t\t\t// and here\n            ]\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:9200/movies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Bulk Index movies",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"index\" : { \"_index\" : \"movies\", \"_type\" : \"my_movies\", \"_id\" : \"507\" } }\n{ \"title\": \"LADYBUGS ARMAGEDDON\", \"screenings\": { \"cinema_du_haut_champ-date\": \"01/01/2018\", \"cinematographe-quality\": \"A\", \"katorza-date\": \"01/02/2018\", \"katorza-quality\": \"B\" } }\n{ \"index\" : { \"_index\" : \"movies\", \"_type\" : \"my_movies\", \"_id\" : \"9\" } }\n{ \"title\": \"ALABAMA DEVIL\",  \"screenings\": { \"cinema_du_haut_champ-date\": \"01/03/2016\", \"cinematographe-quality\": \"A\", \"katorza-date\": \"01/04/2016\", \"katorza-quality\": \"B\"} }\n"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_bulk",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_bulk"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Check Mapping",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_mapping",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_mapping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Exercise: Match screening quality",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"constant_score\": {\n            \"filter\": {\n                \"term\": {\n                    \"screenings.katorza-quality\": \"b\"\n                }\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_search",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Exercise: Search on dates",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"query\": {\n        \"range\": {\n            \"screenings.katorza-date\": {\n            \t\"gte\": \"2017\",\n                \"format\": \"yyyy\"\n            }\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "localhost:9200/movies/my_movies/_search",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies",
+								"my_movies",
+								"_search"
+							]
+						},
+						"description": "https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-date-format.html"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
