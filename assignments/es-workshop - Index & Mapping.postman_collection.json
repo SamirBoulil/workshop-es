@@ -13,10 +13,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200",
 							"host": [
@@ -32,10 +28,6 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://localhost:9200/movies",
 							"protocol": "http",
@@ -86,10 +78,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200/movies/my_movies/507",
 							"host": [
@@ -110,10 +98,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200/movies/my_movies/_count",
 							"host": [
@@ -134,10 +118,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200/movies/_mapping",
 							"host": [
@@ -157,10 +137,6 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200/movies/_doc/507",
 							"host": [
@@ -181,10 +157,6 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200/movies",
 							"host": [
@@ -199,7 +171,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Explicit indexation",
@@ -239,10 +212,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200/_mapping/my_movies",
 							"host": [
@@ -293,10 +262,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200/movies/my_movies/507",
 							"host": [
@@ -343,7 +308,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Normalizer & Analyzer",
@@ -353,10 +319,6 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200/movies",
 							"host": [
@@ -385,7 +347,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t// Fill the index settings (normalizers and analyzers here)\n    \"mappings\": {\n        \"my_movies\": {\n            \"properties\": {\n            \t// Fill the mapping of the properties here\n            }\n        }\n    }\n}"
+							"raw": "{\n    \"settings\": {\n        \"analysis\": {\n            \"normalizer\": {\n\t\t\t\t// Define your normalizers here\n            },\n            \"analyzer\": {\n\t\t\t\t// Define your analyzers here\n            }\n\n            \"char_filter\": {\n\t\t\t\t// Define your char filters here\n            },\n        }\n    },\n    \"mappings\": {\n        \"my_movies\": {\n            \"properties\": {\n\t\t\t\t// Define your properties\n            }\n        }\n    }\n}"
 						},
 						"url": {
 							"raw": "http://localhost:9200/movies",
@@ -636,7 +598,7 @@
 					"response": []
 				},
 				{
-					"name": "9. Exercise: Replace & with space",
+					"name": "9. Mapping for a case insensitive, html_stripped without \"&\"",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -669,7 +631,8 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Dynamic mapping",
@@ -679,10 +642,6 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "localhost:9200/movies",
 							"host": [
@@ -711,7 +670,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mappings\": {\n        \"my_movies\": {\n            \"properties\": {\n\t\t\t\t// define your mapping here\n            },\n            \"dynamic_templates\": [\n\t\t\t\t// and here\n            ]\n        }\n    }\n}"
+							"raw": "{\n    \"settings\": {\n        \"analysis\": {\n            \"normalizer\": {\n            \t// Define normalizer here\n            }\n        }\n    },\n    \"mappings\": {\n        \"my_movies\": {\n            \"properties\": {\n                \"title\": {\n                    \"type\": \"keyword\"\n                }\n            },\n            \"dynamic_templates\": [\n\t\t\t\t// Define dynamic templates here\n            ]\n        }\n    }\n}"
 						},
 						"url": {
 							"raw": "http://localhost:9200/movies",
@@ -759,7 +718,10 @@
 					"response": []
 				},
 				{
-					"name": "4. Check Mapping",
+					"name": "4. Get movies",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [
@@ -774,6 +736,32 @@
 							"mode": "raw",
 							"raw": ""
 						},
+						"url": {
+							"raw": "http://localhost:9200/movies",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9200",
+							"path": [
+								"movies"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Check Mapping",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
 						"url": {
 							"raw": "localhost:9200/movies/my_movies/_mapping",
 							"host": [
@@ -790,7 +778,7 @@
 					"response": []
 				},
 				{
-					"name": "5. Exercise: Match screening quality",
+					"name": "6. Match screening quality",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -824,7 +812,7 @@
 					"response": []
 				},
 				{
-					"name": "5. Exercise: Search on dates",
+					"name": "7. Search on dates",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -858,7 +846,9 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }

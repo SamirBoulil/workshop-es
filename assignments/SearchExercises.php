@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 class SearchExercises extends TestCase
 {
     private const INDEX_NAME = 'movies';
+    private const ELASTICSEARCH_HOST = 'elasticsearch';
 
     /** @var Client */
     private $esClient;
@@ -214,7 +215,9 @@ class SearchExercises extends TestCase
 
     private function createMovieIndex(): Client
     {
-        $esClient = ClientBuilder::create()->build();
+        $esClient = ClientBuilder::create()
+            ->setHosts([self::ELASTICSEARCH_HOST])
+            ->build();
         if ($esClient->indices()->exists(['index' => self::INDEX_NAME])) {
             $esClient->indices()->delete(['index' => self::INDEX_NAME]);
         }
