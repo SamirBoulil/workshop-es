@@ -290,7 +290,7 @@ class SearchExercises extends TestCase
 
     private function indexMovies(): void
     {
-        $movies = json_decode(file_get_contents('movies.json'), true);
+        $movies = json_decode(file_get_contents(__DIR__ . '/movies.json'), true);
         $bulk = [];
         foreach ($movies as $movie) {
             $bulk['body'][] = [

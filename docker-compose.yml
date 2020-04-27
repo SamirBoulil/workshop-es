@@ -26,7 +26,7 @@ services:
       - './:/srv/training'
       - '~/.composer:/home/docker/.composer'
     networks:
-      - 'esnet'
+      - esnet
 
 volumes:
   esdata1:
